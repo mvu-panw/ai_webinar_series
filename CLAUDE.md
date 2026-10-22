@@ -3,7 +3,9 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-Static multi-page HTML/CSS/JS site for a "PANW Capture the Flags" event. No build tools, no framework, no dependencies — open any `.html` file directly in a browser or serve with any static file server.
+Static multi-page HTML/CSS/JS site for "Palo Alto Networks AI Security By Design" — a 5-page informational/demo microsite (Home, Agentic Endpoint Security, AI Gateway, AI Runtime Security, Frontier AI Defense). No build tools, no framework, no dependencies, no auth gate — every page is open. Open any `.html` file directly in a browser or serve with any static file server.
+
+This site replaced an earlier "PANW Capture the Flags" event site (registration → menu → per-product CTF challenges → scoreboard); that flow, its `sessionStorage` auth guard, and its Apps Script-backed registration/scoring have all been removed. `ai_security_by_design.md` is the source spec this rebuild implements.
 
 ## Development
 ```bash
@@ -15,36 +17,24 @@ python3 -m http.server 8080
 ## File Map
 | File | Purpose |
 |---|---|
-| `index.html` | Registration — collects name+email, sets session, redirects to menu |
-| `menu.html` | Grid of CTF/demo challenges by product family (Prisma/Strata, Cortex, Koi, Idira). "Prisma AIRS Healthcare CTF", "Koi", and "Quantum Security in SCM" cards are live; the rest are disabled "Coming Soon" placeholders |
-| `ctf.html` | Live flow step 1 (Healthcare CTF) — Storylane self-guided demo, links to `ctf-challenge.html` |
-| `ctf-challenge.html` | Live flow step 2 (Healthcare CTF) — instructions + Storylane CTF sandbox embed; links straight out to the Google Doc companion guide and Google Form quiz (external URLs, not `companion.html`/`quiz.html`) |
-| `koi.html` | Live flow step 1 (Koi CTF) — self-guided demo embedding a `launch.paloaltonetworks.com` walkthrough (not Storylane), links to `koi-challenge.html` |
-| `koi-challenge.html` | Live flow step 2 (Koi CTF) — instructions + `launch.paloaltonetworks.com` CTF sandbox embed; links out to a dedicated Google Form quiz. No companion guide button (Koi has none) |
-| `quantum-security.html` | Live flow step 1 (Strata Cloud Manager CTF) — self-guided demo embedding a `launch.paloaltonetworks.com` walkthrough, links to `quantum-security-challenge.html`. Same pattern as `koi.html` |
-| `quantum-security-challenge.html` | Live flow step 2 (Strata Cloud Manager CTF) — instructions + `launch.paloaltonetworks.com` CTF sandbox embed; links out to a dedicated Google Form quiz. Same pattern as `koi-challenge.html` |
-| `demo.html`, `companion.html`, `quiz.html` | Orphaned legacy flow — not linked from `menu.html` or the live CTF pages; only reachable by direct URL or from each other. Keep in mind before editing: changes here don't affect what participants actually see |
-| `scoreboard.html` | Live ranked table from Google Form responses via Apps Script |
-| `not-registered.html` | Shown when registration fails (no auth guard — reachable pre-session) |
-| `assets/css/styles.css` | All styles — PANW Prisma AIRS color scheme |
-| `assets/js/registration.js` | Form submit handler → (currently bypassed) Apps Script lookup → sessionStorage |
-| `assets/js/scoreboard.js` | Fetches scores from Apps Script, parses and renders ranked table |
-| `.gitlab-ci.yml` | GitLab Pages deploy — on push to `main`, copies the whole repo into a `public/` artifact and publishes it. No build step, so anything in the repo root gets deployed as-is |
-
-## Configuration
-Both JS files share a single constant — `APPS_SCRIPT_URL` — pointing to a deployed Google Apps Script Web App:
-
-- **`assets/js/registration.js`** — calls the script to validate name+email against a pre-approved list
-- **`assets/js/scoreboard.js`** — calls the same script with `?action=scores` to fetch quiz responses
-
-To redeploy or swap the script: go to script.google.com → Deploy → New deployment → Web app → Execute as: Me → Access: Anyone → copy the URL into both files.
-
-**`companion.html`** — `YOUR_GOOGLE_DOC_EMBED_URL_HERE` in the `<iframe src>` still needs a real Google Docs publish URL (File → Share → Publish to web → Embed). Moot for the live flow since `ctf-challenge.html` links to the doc directly instead.
+| `index.html` | Home page — page-header intro, an `<img>` of the animated `assets/ai_enterprise.gif` (1920×1080, ~8.6 MB), then a `.menu-grid` of 4 clickable "AI Security Layer" cards linking to the other pages |
+| `aes.html` | Agentic Endpoint Security — one page, two `.card` sections: "AES Demo Page" (`launch.paloaltonetworks.com` embed) and "AES Sandbox" (cross-launch button, opens `launch.paloaltonetworks.com` sandbox in a new tab) |
+| `ai-gateway.html` | AI Gateway — graphic + CTA linking out to `gateway.airs-demo.com/architecture/` |
+| `ai-runtime-security.html` | AI Runtime Security — same pattern, links out to `www.airs-demo.com/#architecture-diagrams` |
+| `frontier-ai-defense.html` | Frontier AI Defense ("Unit 42 Frontier AI Defense: Research and Incident Response") — placeholder card, content TBD per spec |
+| `assets/css/styles.css` | All styles — Prisma AIRS color scheme (cyan/purple gradient on near-black, Inter font), reused unchanged from the CTF-era site. Defines shared classes (`.card`, `.embed-wrap`, `.graphic-link`, `.menu-grid`/`.menu-card`, `.btn`) that every page combines with per-page inline `style=""` attributes — expect to touch both when changing a page's look |
+| `assets/images/` | `PAN-Color.png` is the active favicon/nav logo. `ai_gateway.gif` and `prisma_airs_preview.png` are the link-out graphics for `ai-gateway.html`/`ai-runtime-security.html`. `index.html`'s 4 menu cards use `Cortex-Cloud-Hybrid-dark.png` (AES), `Prisma-AIRS-Hybrid-dark.svg` (AI Gateway and AI Runtime Security) and `PAN-Color.png` (Frontier AI Defense) as their icons, via an inline-styled `.card-icon` override (`background:none;width:72px;height:72px`) carried over from the old CTF menu. The other Cortex/Prisma/Strata logos are unused leftovers |
+| `assets/js/` | Empty — the CTF-era `registration.js`/`scoreboard.js` were deleted. No page has any `<script>` tag, inline or external — the site is pure HTML/CSS |
+| `.gitlab-ci.yml` | GitLab Pages deploy — on push to `main`, runs `cp -r * .public` and publishes it as `public/`. No build step, so every non-dot file in the repo root (including `CLAUDE.md`, `README.md`, the `.md` specs, and unused images) is publicly served. There is no `.gitignore`, and `.DS_Store` files are tracked |
+| `ai_security_by_design.md` | The spec this site implements — 5 named pages, page content/embeds, and the site-wide title/favicon/color-scheme requirements |
+| `storylane.md` | Vestigial reference doc about the Storylane demo platform — no page currently embeds Storylane (the old `ctf.html`/`ctf-challenge.html` Storylane embeds were removed with the CTF flow) |
+| `README.md` | Unedited GitLab project-creation boilerplate (from the original "Capture the Flag Page" repo) — no actual project documentation; disregard it |
 
 ## Key Behaviors
-- **Auth guard is inconsistently applied** — don't assume every gated page has it. `menu.html`, `ctf.html`, `ctf-challenge.html`, `koi.html`, `koi-challenge.html`, `quantum-security.html`, `quantum-security-challenge.html`, `scoreboard.html`, and `demo.html` check `sessionStorage.registeredName` (inline `<script>` at the bottom of `<body>`) and redirect to `index.html` if missing. `companion.html` and `quiz.html` currently have **no** guard, despite being conceptually "post-registration" pages — check before relying on the doc comment in the root `CLAUDE.md` files, which describes the intended pattern, not this exception.
-- **Non-Storylane embeds size themselves with the `aspect-ratio` CSS property directly on the `<iframe>`** (`koi.html`, `koi-challenge.html`, `quantum-security.html`, `quantum-security-challenge.html`), not the `padding-bottom` percentage hack used for the Storylane embeds in `ctf.html`/`ctf-challenge.html`. The percentage-padding trick caused visible flicker with the `launch.paloaltonetworks.com` embeds, so don't copy it forward for new `launch.paloaltonetworks.com` pages — copy the `aspect-ratio` pattern instead.
-- **Registration**: validation against the Apps Script is currently bypassed in `registration.js` — any name/email is accepted and stored in `sessionStorage.registeredName`. Re-enable by uncommenting the fetch call.
-- **Scoreboard scoring**: `parseScore()` in `scoreboard.js` handles `"8 / 10"`, `"8/10"`, or raw numeric values; normalizes to a 0–100 percentage. Ties broken by earliest submission timestamp. Refreshes every 60 seconds via `setInterval`.
-- **Session scope**: `sessionStorage` clears when the tab is closed — intentional, so each session requires fresh registration.
-- **No shared templating**: navbar/footer markup is duplicated in every HTML file (per the root `CLAUDE.md` convention) — a layout change means editing every page individually, and it's easy to miss one (e.g. `demo.html` isn't in `menu.html`'s nav the way the other pages are).
+- **No auth guard**: unlike the old CTF site, no page checks `sessionStorage` or redirects — every page is directly reachable.
+- **No templating**: navbar/footer markup is duplicated in every HTML file. Edit all 5 files when updating shared layout.
+- **Two embed styles in `assets/css/styles.css`** — only one is currently used: the `aspect-ratio` CSS property set directly on the embedded element (`aes.html`'s demo `<iframe>` and `index.html`'s GIF `<img>`, both inside `.embed-wrap`) avoids the flicker that the older Storylane `padding-bottom` percentage-hack technique caused. If a future page embeds iframe content, copy the `aspect-ratio` pattern from these, not a padding-bottom trick.
+- **Static-graphic link-out pattern**: `ai-gateway.html` and `ai-runtime-security.html` each use the same `.graphic-link` pattern instead of an iframe — a static image (`aspect-ratio` set inline per-image to match its real dimensions) wrapped in an `<a target="_blank">`, plus a matching `.btn.btn-primary` CTA below it linking to the same external URL. Copy this pattern (not an iframe) for a future page that should link out via a static graphic rather than embed live content.
+- **Stylesheet cache-busting**: every page links `assets/css/styles.css?v=3` with the same version query string. Bump `?v=N` in all 5 HTML files together when editing `styles.css`, or GitLab Pages/browser caching can serve stale CSS to some pages and not others.
+- **"Cross launch" vs. "embed"**: per `ai_security_by_design.md`, AES's Demo Page is an inline `<iframe>` embed; its Sandbox section is instead a `target="_blank"` link-out button — that distinction is intentional, not an inconsistency.
+- **Site-wide nav**: each page's `.nav-links` lists the other 4 pages (the current page omits a link to itself), and the nav `site-title` always links to `index.html`.

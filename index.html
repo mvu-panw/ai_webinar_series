@@ -3,47 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PANW Capture the Flags — Registration</title>
+  <title>Palo Alto Networks AI Security By Design — Home</title>
   <link rel="icon" type="image/png" href="assets/images/PAN-Color.png" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=2" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=3" />
 </head>
 <body>
   <nav>
     <img src="assets/images/PAN-Color.png" alt="Palo Alto Networks" class="logo" />
-    <a class="site-title" href="menu.html">PANW Capture the Flags</a>
-  <div class="nav-links">
-  </div>
+    <a class="site-title" href="index.html">AI Security By Design</a>
+    <div class="nav-links">
+      <a href="aes.html">Endpoint and Identity Security</a>
+      <a href="ai-gateway.html">AI Gateway</a>
+      <a href="ai-runtime-security.html">AI Runtime Security</a>
+      <a href="frontier-ai-defense.html">Frontier AI Defense</a>
+    </div>
   </nav>
 
-  <main style="display:flex;align-items:center;justify-content:center;">
-    <div style="width:100%;max-width:460px;">
-      <div class="page-header">
-        <h1>Welcome</h1>
-        <p>Enter your details to access the demos and capture the flag challenges.</p>
-      </div>
+  <main>
+    <div class="page-header">
+      <h1>AI Security By Design</h1>
+      <p>AI has transformed the enterprise IT landscape by shifting the primary security focus from static, human-centric perimeters to dynamic, agentic environments where autonomous AI identities interact with data at machine speed. In this new era, Zero Trust principles must be adapted to include semantic and intent-based verification, ensuring that every automated request is validated for its underlying purpose and role-alignment before access is granted.</p>
+    </div>
 
-      <div class="card">
-        <form id="registration-form" novalidate>
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" placeholder="Jane Smith" required autocomplete="name" />
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="jane@example.com" required autocomplete="email" />
-            <p class="form-note">Use the email address you provided during sign-up.</p>
-          </div>
-          <p id="form-error" style="color:#ff6b6b;font-size:0.85rem;margin-bottom:16px;min-height:1.2em;"></p>
-          <button type="submit" id="submit-btn" class="btn btn-primary">Continue</button>
-        </form>
+    <div class="card" style="margin-bottom:32px;">
+      <p style="font-weight:600;font-size:1.15rem;margin-bottom:14px;color:var(--cyan);">Shadow AI: Seeing and Governing the AI Your Workforce Uses</p>
+      <p style="color:var(--muted);margin-bottom:20px;line-height:1.6;">Join us for our first webinar on Thursday, November 12, 2026 from 11:00AM-12:00PM PST.</p>
+      <div class="cta-row" style="margin-top:0;">
+        <a href="https://register.paloaltonetworks.com/securingtheworkforce" target="_blank" rel="noopener" class="btn btn-primary">Register Now</a>
       </div>
+    </div>
+
+    <div class="embed-wrap">
+      <img src="assets/ai_enterprise.gif" alt="AI security across the enterprise"
+        style="display:block;width:100%;aspect-ratio:1920/1080;border:1px solid rgba(63,95,172,0.35);box-shadow:0px 0px 18px rgba(26,19,72,0.15);border-radius:10px;box-sizing:border-box;background:#000;" />
+    </div>
+
+    <p class="section-label">AI Security Layers</p>
+    <div class="menu-grid">
+      <a href="aes.html" class="menu-card">
+        <div class="card-icon" style="background:none;width:72px;height:72px;">
+          <img src="assets/images/Cortex-Cloud-Hybrid-dark.png" alt="Cortex Cloud" style="width:100%;height:100%;object-fit:contain;" />
+        </div>
+        <span class="card-label">Endpoint and Identity Security</span>
+        <span class="card-sub">Explore Endpoint and Identity Security</span>
+      </a>
+
+      <a href="ai-gateway.html" class="menu-card">
+        <div class="card-icon" style="background:none;width:72px;height:72px;">
+          <img src="assets/images/Prisma-AIRS-Hybrid-dark.svg" alt="Prisma AIRS" style="width:100%;height:100%;object-fit:contain;" />
+        </div>
+        <span class="card-label">AI Gateway</span>
+        <span class="card-sub">Explore the gateway</span>
+      </a>
+
+      <a href="ai-runtime-security.html" class="menu-card">
+        <div class="card-icon" style="background:none;width:72px;height:72px;">
+          <img src="assets/images/Prisma-AIRS-Hybrid-dark.svg" alt="Prisma AIRS" style="width:100%;height:100%;object-fit:contain;" />
+        </div>
+        <span class="card-label">AI Runtime Security</span>
+        <span class="card-sub">Explore runtime security</span>
+      </a>
+
+      <a href="frontier-ai-defense.html" class="menu-card">
+        <div class="card-icon" style="background:none;width:72px;height:72px;">
+          <img src="assets/images/PAN-Color.png" alt="Palo Alto Networks" style="width:100%;height:100%;object-fit:contain;" />
+        </div>
+        <span class="card-label">Frontier AI Defense</span>
+        <span class="card-sub">Unit 42 research</span>
+      </a>
     </div>
   </main>
 
   <footer>
     &copy; 2025 Palo Alto Networks. All rights reserved.
   </footer>
-
-  <script src="assets/js/registration.js"></script>
 </body>
 </html>
