@@ -1,6 +1,6 @@
 // Records each slide of tan_nguyen_soc.html to its own 1920×1080 H.264 MP4 in ../assets/videos/soc-NN-<slug>.mp4.
 //
-// Needs: ffmpeg on PATH, Google Chrome installed, the `playwright` npm package (point PW_DIR at the folder whose
+// Needs: ffmpeg on PATH, the `playwright` npm package plus its Chromium (`npx playwright install chromium`) (point PW_DIR at the folder whose
 // node_modules has it), and the site served at BASE (default http://127.0.0.1:9000, i.e. `python3 -m http.server 9000`
 // from the repo root). Usage:
 //   PW_DIR=/path/with/node_modules node php2shell_webinar/record_soc_deck.mjs [slideNumbers...]
@@ -9,7 +9,7 @@
 // for BEATS[id][k] seconds (the deck's own animation length for that beat, from its u(k, delay, dur) calls) plus HOLD
 // for reading, then presses → for the next beat. It never presses past the last beat, so the deck never changes slide.
 import { createRequire } from 'node:module';
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, linkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -38,7 +38,10 @@ const BEATS = {
 const slug = s => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const browser = await chromium.launch({ channel: 'chrome', headless: true });
+// Playwright's own Chromium (`npx playwright install chromium`), not Google Chrome: company-managed Chrome disallows
+// DevTools remote debugging and exits ~5 s after launch.
+// CHROMIUM = path to a Chromium binary, if Playwright's own install can't be used (e.g. its unpack step is blocked).
+const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM || undefined });
 const ctx = await browser.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1, reducedMotion: 'no-preference' });
 const page = await ctx.newPage();
 page.on('crash', () => console.error('page crashed'));
@@ -86,24 +89,24 @@ for (const [i, s] of slides.entries()) {
   await sleep(200);
   await cdp.detach();
 
-  // keep frames from the restart on (plus the last frame before it, as the opening image), then write a concat list
-  // with each frame shown until the next one arrived
-  let start = frames.findIndex(fr => fr.t >= t0);
-  start = start <= 0 ? 0 : start - 1;
-  const use = frames.slice(start);
-  const list = use.map((fr, j) => {
-    const next = j + 1 < use.length ? use[j + 1].t : tEnd;
-    const from = j === 0 ? t0 : fr.t;
-    return `file '${fr.f}'\nduration ${Math.max(next - from, 0.001).toFixed(4)}`;
-  }).join('\n') + `\nfile '${use[use.length - 1].f}'\n`;
-  writeFileSync(join(dir, 'list.txt'), list);
+  // resample to a constant frame rate: output frame j (at t0 + j/FPS) is the newest captured frame at or before that
+  // moment. (ffmpeg's concat demuxer can't be fed per-frame durations here: it stretches sub-frame durations, so clips
+  // with sparse capture came out seconds too long.)
+  const seq = join(dir, 'seq'); mkdirSync(seq);
+  const total = Math.round((tEnd - t0) * FPS);
+  let c = 0;
+  for (let j = 0; j < total; j++) {
+    const at = t0 + j / FPS;
+    while (c + 1 < frames.length && frames[c + 1].t <= at) c++;
+    linkSync(frames[c].f, join(seq, `${String(j).padStart(5, '0')}.jpg`));
+  }
 
   const out = join(OUT, `soc-${String(n).padStart(2, '0')}-${slug(s.nav)}.mp4`);
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', join(dir, 'list.txt'),
-    '-vf', `fps=${FPS},scale=1920:1080:flags=lanczos,format=yuv420p`, '-c:v', 'libx264', '-crf', '20', '-preset', 'slow',
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', join(seq, '%05d.jpg'),
+    '-vf', 'scale=1920:1080:flags=lanczos,format=yuv420p', '-c:v', 'libx264', '-crf', '20', '-preset', 'slow',
     '-movflags', '+faststart', '-an', out]);
-  rmSync(dir, { recursive: true, force: true });
-  console.log(`${n}\t${s.id}\t${s.steps} beats\t${(tEnd - t0).toFixed(1)}s\t${use.length} frames\t${out.split('/').pop()}`);
+  if (process.env.KEEP) console.log("kept", dir); else rmSync(dir, { recursive: true, force: true });
+  console.log(`${n}\t${s.id}\t${s.steps} beats\t${(tEnd - t0).toFixed(1)}s\t${frames.length} captured\t${out.split('/').pop()}`);
 }
 
 await browser.close();

@@ -2,7 +2,7 @@
 
 ## Intro — Taylor Togami
 
-Welcome to our Securing AI by design webinar series. Today we will be covering Inside the PHP Vulnerabilities with Palo Alto Networks. I'm Taylor Togami, Solutions Consultant for the NorCal district. I'll be kicking things off with a quick landscape breakdown before handing the mic over to my teammates, Shweta and Mike, who will host our guest interviews.
+Welcome to our Securing AI by design webinar series. In today's session we will be diving deeper into the PHP2Shell Vulnerabilities with Palo Alto Networks. I'll be kicking things off with a quick landscape breakdown before handing the mic over to my teammates, Shweta and Mike, who will host our guest interviews.
 
 > **[CUE FOR SLIDE 1 - AGENDA SLIDE]**
 
@@ -96,6 +96,88 @@ Palo Alto Networks is taking aggressive steps to remediate this threat for both 
 ## SOC Team Day in the Life Questions with Tan Nguyen
 
 **Host:** We are joined by Tan Nguyen from our very own SOC. We invited him on to give you insight into how we dealt with the vulnerabilities.
+
+### SOC deck
+
+*1. Minus days*
+
+<video class="slide-video" src="assets/videos/soc-01-minus-days.mp4" controls muted playsinline preload="metadata"></video>
+
+*2. Who's talking*
+
+<video class="slide-video" src="assets/videos/soc-02-who-s-talking.mp4" controls muted playsinline preload="metadata"></video>
+
+*3. Agenda*
+
+<video class="slide-video" src="assets/videos/soc-03-agenda.mp4" controls muted playsinline preload="metadata"></video>
+
+*4. What we protect*
+
+<video class="slide-video" src="assets/videos/soc-04-what-we-protect.mp4" controls muted playsinline preload="metadata"></video>
+
+*5. Find it. Fix it.*
+
+<video class="slide-video" src="assets/videos/soc-05-find-it-fix-it.mp4" controls muted playsinline preload="metadata"></video>
+
+*6. The part we can see*
+
+<video class="slide-video" src="assets/videos/soc-06-the-part-we-can-see.mp4" controls muted playsinline preload="metadata"></video>
+
+*7. Finding — Challenges*
+
+<video class="slide-video" src="assets/videos/soc-07-finding-challenges.mp4" controls muted playsinline preload="metadata"></video>
+
+*8. Find it — Solutions*
+
+<video class="slide-video" src="assets/videos/soc-08-find-it-solutions.mp4" controls muted playsinline preload="metadata"></video>
+
+*9. Fixing — Challenges*
+
+<video class="slide-video" src="assets/videos/soc-09-fixing-challenges.mp4" controls muted playsinline preload="metadata"></video>
+
+*10. Fix it — Solutions*
+
+<video class="slide-video" src="assets/videos/soc-10-fix-it-solutions.mp4" controls muted playsinline preload="metadata"></video>
+
+*11. Minus days*
+
+<video class="slide-video" src="assets/videos/soc-11-minus-days.mp4" controls muted playsinline preload="metadata"></video>
+
+*12. How it all connects (MOSAIC)*
+
+<video class="slide-video" src="assets/videos/soc-12-how-it-all-connects-mosaic.mp4" controls muted playsinline preload="metadata"></video>
+
+*13. Find It — Deep Dives*
+
+<video class="slide-video" src="assets/videos/soc-13-find-it-deep-dives.mp4" controls muted playsinline preload="metadata"></video>
+
+*14. Deep Dive · Cobra + Atlas — map everything, rank by risk*
+
+<video class="slide-video" src="assets/videos/soc-14-deep-dive-cobra-atlas-map-everything-rank-by-ris.mp4" controls muted playsinline preload="metadata"></video>
+
+*15. Deep Dive · Threat intel · CyberNova*
+
+<video class="slide-video" src="assets/videos/soc-15-deep-dive-threat-intel-cybernova.mp4" controls muted playsinline preload="metadata"></video>
+
+*16. Deep Dive · Mimir*
+
+<video class="slide-video" src="assets/videos/soc-16-deep-dive-mimir.mp4" controls muted playsinline preload="metadata"></video>
+
+*17. Deep Dive · Blackbird*
+
+<video class="slide-video" src="assets/videos/soc-17-deep-dive-blackbird.mp4" controls muted playsinline preload="metadata"></video>
+
+*18. Deep Dive · Blackbird — small flaws, chained*
+
+<video class="slide-video" src="assets/videos/soc-18-deep-dive-blackbird-small-flaws-chained.mp4" controls muted playsinline preload="metadata"></video>
+
+*19. Fix It — Deep Dives*
+
+<video class="slide-video" src="assets/videos/soc-19-fix-it-deep-dives.mp4" controls muted playsinline preload="metadata"></video>
+
+*20. One flaw, end to end (PHP)*
+
+<video class="slide-video" src="assets/videos/soc-20-one-flaw-end-to-end-php.mp4" controls muted playsinline preload="metadata"></video>
 
 ### Questions
 
