@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Palo Alto Networks AI Security By Design — Home</title>
   <link rel="icon" type="image/png" href="assets/images/PAN-Color.png" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=3" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=6" />
 </head>
 <body>
   <nav>
@@ -16,6 +16,7 @@
       <a href="ai-gateway.html">AI Gateway</a>
       <a href="ai-runtime-security.html">AI Runtime Security</a>
       <a href="frontier-ai-defense.html">Frontier AI Defense</a>
+      <a href="php2shell-webinar.html">PHP2Shell Webinar</a>
     </div>
   </nav>
 
@@ -25,17 +26,17 @@
       <p>Adaptive Defense for the Agentic Era</p>
     </div>
 
-    <div class="card" style="margin-bottom:32px;">
-      <p style="font-weight:600;font-size:1.15rem;margin-bottom:14px;color:var(--cyan);">Shadow AI: Seeing and Governing the AI Your Workforce Uses</p>
-      <p style="color:var(--muted);margin-bottom:20px;line-height:1.6;">Join us for our first webinar on Thursday, November 12, 2026 from 11:00AM-12:00PM PST.</p>
-      <div class="cta-row" style="margin-top:0;">
-        <a href="https://register.paloaltonetworks.com/securingtheworkforce" target="_blank" rel="noopener" class="btn btn-primary">Register Now</a>
+    <div class="slideshow" aria-roledescription="carousel" aria-label="AI Security By Design overview">
+      <div class="slideshow-frame">
+        <img class="slide" src="assets/ai_enterprise.gif" alt="AI security across the enterprise (slide 1 of 2)" />
+        <img class="slide" src="assets/phase_1_sec_ai.gif" alt="Phase 1 of securing AI (slide 2 of 2)" loading="lazy" hidden />
+        <button class="slide-nav slide-prev" type="button" aria-label="Previous slide">&#8249;</button>
+        <button class="slide-nav slide-next" type="button" aria-label="Next slide">&#8250;</button>
       </div>
-    </div>
-
-    <div class="embed-wrap">
-      <img src="assets/ai_enterprise.gif" alt="AI security across the enterprise"
-        style="display:block;width:100%;aspect-ratio:1920/1080;border:1px solid rgba(63,95,172,0.35);box-shadow:0px 0px 18px rgba(26,19,72,0.15);border-radius:10px;box-sizing:border-box;background:#000;" />
+      <div class="slide-dots">
+        <button type="button" aria-label="Go to slide 1" aria-current="true"></button>
+        <button type="button" aria-label="Go to slide 2"></button>
+      </div>
     </div>
 
     <p class="section-label">AI Security Layers</p>
@@ -77,5 +78,32 @@
   <footer>
     &copy; 2025 Palo Alto Networks. All rights reserved.
   </footer>
+
+  <script>
+    (function () {
+      var show = document.querySelector('.slideshow');
+      var slides = show.querySelectorAll('.slide');
+      var dots = show.querySelectorAll('.slide-dots button');
+      var current = 0;
+
+      function go(i) {
+        current = (i + slides.length) % slides.length;
+        slides.forEach(function (s, n) { s.hidden = n !== current; });
+        dots.forEach(function (d, n) {
+          if (n === current) d.setAttribute('aria-current', 'true');
+          else d.removeAttribute('aria-current');
+        });
+      }
+
+      show.querySelector('.slide-prev').addEventListener('click', function () { go(current - 1); });
+      show.querySelector('.slide-next').addEventListener('click', function () { go(current + 1); });
+      slides.forEach(function (s) { s.addEventListener('click', function () { go(current + 1); }); });
+      dots.forEach(function (d, n) { d.addEventListener('click', function () { go(n); }); });
+      show.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') go(current - 1);
+        if (e.key === 'ArrowRight') go(current + 1);
+      });
+    })();
+  </script>
 </body>
 </html>

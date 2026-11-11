@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palo Alto Networks AI Security By Design — PHP2Shell Webinar</title>
+  <link rel="icon" type="image/png" href="assets/images/PAN-Color.png" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=6" />
+</head>
+<body>
+  <nav>
+    <img src="assets/images/PAN-Color.png" alt="Palo Alto Networks" class="logo" />
+    <a class="site-title" href="index.html">AI Security By Design</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aes.html">Endpoint and Identity Security</a>
+      <a href="ai-gateway.html">AI Gateway</a>
+      <a href="ai-runtime-security.html">AI Runtime Security</a>
+      <a href="frontier-ai-defense.html">Frontier AI Defense</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>PHP2Shell Webinar</h1>
+      <p>Webinar Script: Unpacking the Critical PHP Vulnerabilities</p>
+    </div>
+
+    <!-- Rendered from assets/php2shell_webinar_script.md — edit the .md, not this page -->
+    <article class="card script" id="script">
+      <p style="color:var(--muted);">Loading script…</p>
+    </article>
+  </main>
+
+  <footer>
+    &copy; 2025 Palo Alto Networks. All rights reserved.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script>
+    (function () {
+      var el = document.getElementById('script');
+      var src = 'assets/php2shell_webinar_script.md';
+
+      fetch(src)
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          return r.text();
+        })
+        .then(function (md) {
+          // The page header already shows the script's title, so drop its leading "# " heading.
+          el.innerHTML = marked.parse(md.replace(/^# .*\n+/, ''));
+          // Speaker cues are written as "> **[CUE ...]**" blockquotes; style them as cue tags.
+          el.querySelectorAll('blockquote').forEach(function (b) {
+            if (/^\s*\[CUE/i.test(b.textContent)) b.classList.add('cue');
+          });
+          el.querySelectorAll('a[href^="http"]').forEach(function (a) {
+            a.target = '_blank';
+            a.rel = 'noopener';
+          });
+        })
+        .catch(function () {
+          el.innerHTML = '<p style="color:var(--muted);">The script couldn’t be loaded. ' +
+            '<a href="' + src + '">Open the Markdown file</a> instead. ' +
+            '(Pages opened straight from disk can’t load it; use a local server.)</p>';
+        });
+    })();
+  </script>
+</body>
+</html>
